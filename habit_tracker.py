@@ -75,6 +75,14 @@ def print_habits(habits):
         print(f"{i} - {habit}")
 
 
+def print_habits_if_any(habits):
+    if empty_list(habits):
+        print("\nThe list is empty.")
+        return
+    print_habits(habits)
+
+
+
 FREQUENCIES = {
     "1": "daily",
     "2": "weekly",
@@ -96,10 +104,7 @@ def handle_choice(choice, habit_manager):
 
     elif choice == "2":
         habits = habit_manager.get_habits()
-        if empty_list(habits):
-            print("\nThe list is empty.")
-            return
-        print_habits(habits)
+        print_habits_if_any(habits)
 
         number = input("Which habit do you wish to delete? (order of the habit)\n")
         index = get_valid_int(number)
@@ -111,17 +116,11 @@ def handle_choice(choice, habit_manager):
 
     elif choice == "3":
         habits = habit_manager.get_habits()
-        if empty_list(habits):
-            print("\nThe list is empty.")
-            return
-        print_habits(habits)
+        print_habits_if_any(habits)
 
     elif choice == "4":
         habits = habit_manager.get_habits()
-        if empty_list(habits):
-            print("\nThe list is empty.")
-            return
-        print_habits(habits)
+        print_habits_if_any(habits)
 
         number = input("Which habit do you wish to mark as done? (order of the habit)\n")
         index = get_valid_int(number)
@@ -134,10 +133,7 @@ def handle_choice(choice, habit_manager):
 
     elif choice == "5":
         habits = habit_manager.get_habits()
-        if empty_list(habits):
-            print("\nThe list is empty.")
-            return
-        print_habits(habits)
+        print_habits_if_any(habits)
 
         number = input("For which habit do you wish to change the frequency? (order of the habit)\n")
         index = get_valid_int(number)
