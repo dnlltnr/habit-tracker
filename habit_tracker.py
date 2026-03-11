@@ -82,6 +82,18 @@ def print_habits_if_any(habits):
     print_habits(habits)
 
 
+def valid_index(habits, number):
+    index = get_valid_int(number)
+    if index is None:
+        print("\nNot a number.")
+        return
+    index -= 1
+    if not 0 <= index < len(habits):
+        print("\nThis habit is not on the list.")
+        return
+    index += 1
+    return index
+
 
 FREQUENCIES = {
     "1": "daily",
@@ -107,10 +119,10 @@ def handle_choice(choice, habit_manager):
         print_habits_if_any(habits)
 
         number = input("Which habit do you wish to delete? (order of the habit)\n")
-        index = get_valid_int(number)
+        index = valid_index(habits, number)
         if index is None:
-            print("\nThis habit is not on the list.")
             return
+
         habit_manager.delete_habit(index)
         print("\nThe habit has been successfully deleted.")
 
@@ -123,10 +135,10 @@ def handle_choice(choice, habit_manager):
         print_habits_if_any(habits)
 
         number = input("Which habit do you wish to mark as done? (order of the habit)\n")
-        index = get_valid_int(number)
+        index = valid_index(habits, number)
         if index is None:
-            print("\nThis habit is not on the list.")
             return
+        
         habit_manager.mark_as_done(index)
         print("\nThe habit has been successfully marked as done.")
         
@@ -136,9 +148,8 @@ def handle_choice(choice, habit_manager):
         print_habits_if_any(habits)
 
         number = input("For which habit do you wish to change the frequency? (order of the habit)\n")
-        index = get_valid_int(number)
+        index = valid_index(habits, number)
         if index is None:
-            print("\nThis habit is not on the list.")
             return
         
         number = input("Enter the new number for a frequency of the habit (1 - daily, 2 - weekly, 3 - monthly)\n")
