@@ -104,6 +104,70 @@ def if_valid_change_frequency(number):
     return None
 
 
+def add_habit_action(habit_manager):
+    name = input("Write a title for the habit:\n")
+    number = input("Enter the number for a frequency of the habit (1 - daily, 2 - weekly, 3 - monthly)\n")
+
+    frequency = if_valid_change_frequency(number)
+    if frequency is None:
+        return
+        
+    habit_manager.add_habit(name, frequency)
+    print("\nThe habit has been successfully added.")
+
+
+def delete_habit_action(habit_manager):
+    habits = habit_manager.get_habits()
+    if not print_habits_if_any(habits):
+        return
+
+    number = input("\nWhich habit do you wish to delete? (order of the habit)\n")
+    index = valid_index(habits, number)
+    if index is None:
+        return
+
+    habit_manager.delete_habit(index)
+    print("\nThe habit has been successfully deleted.")
+
+
+def show_habits_action(habit_manager):
+    habits = habit_manager.get_habits()
+    print_habits_if_any(habits)
+
+
+def mark_as_done_action(habit_manager):
+    habits = habit_manager.get_habits()
+    if not print_habits_if_any(habits):
+        return
+
+    number = input("Which habit do you wish to mark as done? (order of the habit)\n")
+    index = valid_index(habits, number)
+    if index is None:
+        return
+    
+    habit_manager.mark_as_done(index)
+    print("\nThe habit has been successfully marked as done.")
+
+
+def change_frequency_action(habit_manager):
+    habits = habit_manager.get_habits()
+    if not print_habits_if_any(habits):
+        return
+
+    number = input("For which habit do you wish to change the frequency? (order of the habit)\n")
+    index = valid_index(habits, number)
+    if index is None:
+        return
+    
+    number = input("Enter the new number for a frequency of the habit (1 - daily, 2 - weekly, 3 - monthly)\n")
+    frequency = if_valid_change_frequency(number)
+    if frequency is None:
+        return
+        
+    habit_manager.change_frequency(index, frequency)
+    print("\nFrequency of the habit has been successfully changed.")
+
+
 FREQUENCIES = {
     "1": "daily",
     "2": "weekly",
@@ -111,67 +175,20 @@ FREQUENCIES = {
 }
 
 
+ACTIONS = {
+    "1": add_habit_action,
+    "2": delete_habit_action,
+    "3": show_habits_action,
+    "4": mark_as_done_action,
+    "5": change_frequency_action
+}
+
+
 def handle_choice(choice, habit_manager):
-    if choice == "1":
-        name = input("Write a title for the habit:\n")
-        number = input("Enter the number for a frequency of the habit (1 - daily, 2 - weekly, 3 - monthly)\n")
+    action = ACTIONS.get(choice)
 
-        frequency = if_valid_change_frequency(number)
-        if frequency is None:
-            return
-          
-        habit_manager.add_habit(name, frequency)
-        print("\nThe habit has been successfully added.")
-
-    elif choice == "2":
-        habits = habit_manager.get_habits()
-        if not print_habits_if_any(habits):
-            return
-
-        number = input("\nWhich habit do you wish to delete? (order of the habit)\n")
-        index = valid_index(habits, number)
-        if index is None:
-            return
-
-        habit_manager.delete_habit(index)
-        print("\nThe habit has been successfully deleted.")
-
-    elif choice == "3":
-        habits = habit_manager.get_habits()
-        print_habits_if_any(habits)
-
-    elif choice == "4":
-        habits = habit_manager.get_habits()
-        if not print_habits_if_any(habits):
-            return
-
-        number = input("Which habit do you wish to mark as done? (order of the habit)\n")
-        index = valid_index(habits, number)
-        if index is None:
-            return
-        
-        habit_manager.mark_as_done(index)
-        print("\nThe habit has been successfully marked as done.")
-        
-
-    elif choice == "5":
-        habits = habit_manager.get_habits()
-        if not print_habits_if_any(habits):
-            return
-
-        number = input("For which habit do you wish to change the frequency? (order of the habit)\n")
-        index = valid_index(habits, number)
-        if index is None:
-            return
-        
-        number = input("Enter the new number for a frequency of the habit (1 - daily, 2 - weekly, 3 - monthly)\n")
-        frequency = if_valid_change_frequency(number)
-        if frequency is None:
-            return
-          
-        habit_manager.add_habit(name, frequency)
-        print("\nThe habit has been successfully added.")
-
+    if action:
+        action(habit_manager)
     else:
         print("\nInvalid input...")
 
