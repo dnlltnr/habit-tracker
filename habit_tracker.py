@@ -30,19 +30,20 @@ class Habit:
 
 
 class HabitManager:
-    def __init__(self):
+    def __init__(self, file_path="habits.json"):
+        self.file_path = file_path
         self.habits = []
 
 
     def save(self):
         habits_in_dict = [habit.to_dict() for habit in self.habits]
         
-        with open("habits.json", "w", encoding="utf-8") as file:
+        with open(self.file_path, "w", encoding="utf-8") as file:
             json.dump(habits_in_dict, file, indent=4)
             
     def load(self):
         try:
-            with open("habits.json", "r", encoding="utf-8") as file:
+            with open(self.file_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
         except FileNotFoundError:
             return
