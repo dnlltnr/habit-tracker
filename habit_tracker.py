@@ -1,4 +1,5 @@
 
+import json
 from datetime import date
 
 class Habit:
@@ -7,6 +8,16 @@ class Habit:
         self.created_at = date.today()
         self.frequency = frequency
         self.is_done_today = is_done_today
+    
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "created_at": str(self.created_at),
+            "frequency": self.frequency,
+            "is_done_today": self.is_done_today
+        }
+
 
     def __repr__(self):
         return f"Habit(name={self.name}, frequency={self.frequency}, created_at={self.created_at}, is_done_today={self.is_done_today})"
@@ -22,14 +33,39 @@ class HabitManager:
     def __init__(self):
         self.habits = []
 
+
+    def save(self):
+        habits_in_dict = [habit.to_dict() for habit in self.habits]
+        
+        with open("habits.json", "w", encoding="utf-8") as file:
+            json.dump(habits_in_dict, file, indent=4)
+            
+    def load(self):
+        try:
+            with open("habits.json", "r", encoding="utf-8") as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            return
+
+        for habit_data in data:
+            habit = Habit(
+                habit_data["name"],
+                habit_data["frequency"],
+                habit_data["is_done_today"]
+            )
+            self.habits.append(habit)
+
+
     def add_habit(self, name, frequency):
         new_habit = Habit(name, frequency)
         self.habits.append(new_habit)
+        self.save()
     
     def delete_habit(self, index):
         index -= 1
         if 0 <= index < len(self.habits):
             del self.habits[index]
+            self.save()
 
     def get_habits(self):
         return self.habits.copy()
@@ -38,11 +74,13 @@ class HabitManager:
         index -= 1
         if 0 <= index < len(self.habits):
             self.habits[index].complete()
+            self.save()
 
     def change_frequency(self, index, frequency):
         index -= 1
         if 0 <= index < len(self.habits):
             self.habits[index].change_frequency(frequency)
+            self.save()
 
 
 def menu():
@@ -195,6 +233,7 @@ def handle_choice(choice, habit_manager):
 
 def main():
     habit_manager = HabitManager()
+    habit_manager.load()
 
     while True:
         menu()
