@@ -4,7 +4,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from habit_tracker import Habit
+from inventory.models import Habit
 
 def test_create_habit():
     habit = Habit("Walk", "daily")

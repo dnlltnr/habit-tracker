@@ -4,7 +4,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from habit_tracker import HabitManager
+from inventory.manager import HabitManager
 
 
 def test_add_habit():
